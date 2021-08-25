@@ -1,5 +1,5 @@
 {
-  "name": "@kupi/react-client",
+  "name": "@profitmaker/react-client",
   "version": "0.6.0",
   "private": true,
   "dependencies": {

@@ -16,6 +16,6 @@ export default {
       used: 0.1,
       totalBTC: 4,
       totalUSD: 40000,
-    }
+    },
   ],
 }

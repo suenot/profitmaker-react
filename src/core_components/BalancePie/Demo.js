@@ -8,6 +8,6 @@ export default {
     {
       shortName: 'ETH',
       totalUSD: 40000,
-    }
+    },
   ],
 }

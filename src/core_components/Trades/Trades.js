@@ -4,6 +4,8 @@ import { observer } from 'mobx-react'
 import moment from 'moment'
 import Preloader from '../Preloader'
 import axios from 'axios'
+import Demo from './Demo'
+import WidgetNotification from 'core_components/WidgetNotification'
 
 // import TradesStore from 'stores/TradesStore'
 
@@ -19,9 +21,12 @@ class Trades extends React.Component {
   }
 
   render() {
-    const {stock, pair} = this.props.data
+    const {stock, pair, demo} = this.props.data
     var key = `${stock}--${pair}`
     var data = this.state.data
+    if (demo) {
+      data = Demo
+    }
     if (data === undefined) {
       return <Preloader />
     } else {
@@ -51,6 +56,7 @@ class Trades extends React.Component {
             }
             </tbody>
           </table>
+          { demo && <WidgetNotification type="warning" msg="Demo mode: using test data"/> }
         </div>
       )
     }

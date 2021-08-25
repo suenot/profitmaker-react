@@ -5,6 +5,8 @@ import { observer } from 'mobx-react'
 import './theme.sass'
 // import template from 'es6-template-strings' // TODO: remove from packages
 import axios from 'axios'
+import Demo from './Demo'
+import WidgetNotification from 'core_components/WidgetNotification'
 
 @observer
 export default class ChartComponent extends React.Component {
@@ -27,7 +29,11 @@ export default class ChartComponent extends React.Component {
   }
 
 	render() {
+    const {demo} = this.props.data
     var data = this.state.data
+    if (demo) {
+      data = Demo
+    }
     if (this.state.hasError) {
       return <div></div>
     } else {
@@ -46,7 +52,10 @@ export default class ChartComponent extends React.Component {
           return order
         })
         return (
-          <Chart id={`${dashboardId}_${widgetId}_chart`} type="hybrid" data={ordersJSON} _data={this.props.data} />
+          <div>
+            <Chart id={`${dashboardId}_${widgetId}_chart`} type="hybrid" data={ordersJSON} _data={this.props.data} />
+            { demo && <WidgetNotification type="warning" msg="Demo mode: using test data"/> }
+          </div>
         )
       }
     }
@@ -128,6 +137,8 @@ export default class ChartComponent extends React.Component {
   }
 
   start() {
+    const {demo} = this.props.data
+    if (demo) return
     this.setState({
       interval: setInterval(()=>{
         this.fetchOhlcv()

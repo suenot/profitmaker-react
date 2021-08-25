@@ -12,7 +12,7 @@
     "authorLink": "https://github.com/kupi-network/kupi-terminal",
     "source": "https://github.com/kupi-network/kupi-terminal/blob/master/react-client/src/core_components/BalancePie/BalancePie.js",
     "data": {
-      "demo": false,
+      "demo": true,
       "stock": "TOTAL",
       "stockTemp": "BINANCE",
       "accountName": "",
@@ -37,7 +37,7 @@
     "authorLink": "https://github.com/kupi-network/kupi-terminal",
     "source": "https://github.com/kupi-network/kupi-terminal/blob/master/react-client/src/core_components/BalancePie/BalancePie.js",
     "data": {
-      "demo": false,
+      "demo": true,
       "stock": "BINANCE",
       "stockTemp": "BINANCE",
       "accountName": "",

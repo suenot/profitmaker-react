@@ -5,6 +5,8 @@ import uuidv1 from 'uuid/v1'
 import Preloader from '../Preloader'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
+import Demo from './Demo'
+import WidgetNotification from 'core_components/WidgetNotification'
 
 import CoinsStore from 'stores/CoinsStore'
 // import OrdersStore from 'stores/OrdersStore'
@@ -29,14 +31,17 @@ class Orders extends React.Component {
   }
 
   render() {
-    const {type, stock, pair, visualMode, visualModeMax, visualModeCrocodileMax, visualModeWallsMax} = this.props.data
+    const {type, stock, pair, visualMode, visualModeMax, visualModeCrocodileMax, visualModeWallsMax, demo} = this.props.data
     var [coinFrom, coinTo] = pair.split('_')
     var key = `${stock}--${pair}`
     // var color = type === 'asks' ? 'rgba(255, 138, 138, 0.42)' : 'rgba(78, 136, 71, 0.42)'
     var data = this.state.data
+
+    // return <p>{JSON.stringify(data)}</p>
     if (data === undefined || data['asks'] === undefined || data['bids'] === undefined) {
 			return <Preloader />
     }
+
     var asks = data['asks'].slice(0, 30)
     if (type === 'both') {
       asks = _.reverse(_.clone(asks))
@@ -210,10 +215,13 @@ class Orders extends React.Component {
   }
 
   async fetchOrders() {
-    const {stock, pair} = this.props.data
+    const {stock, pair, demo} = this.props.data
     var stockLowerCase = stock.toLowerCase()
     var data
-    if (this.state.tube === 'ccxt') {
+    if (demo) {
+      data = Demo
+      this.finish()
+    } else if (this.state.tube === 'ccxt') {
       data = await this.fetchOrders_ccxt(stockLowerCase, pair)
     } else {
       data = await this.fetchOrders_kupi(stockLowerCase, pair)
@@ -224,6 +232,22 @@ class Orders extends React.Component {
       hash: JSON.stringify(data)
     })
 
+    this.ordersAdapter(data)
+    
+    this.setState({
+      data: data
+    })
+    if (this.props.data.type === 'both' && !this.state.center) {
+      setTimeout(()=>{
+        this.toCenter()
+        this.setState({
+          center: true
+        })
+      }, 200)
+    }
+  }
+
+  ordersAdapter(data) {
     var sum = {asks: 0, bids: 0}
 
     for( let type of Object.keys(sum) ) {
@@ -235,8 +259,8 @@ class Orders extends React.Component {
           sum[type] = total + sum[type]
           data[type][key] = {
             id: uuidv1(),
-            price: price,
-            amount: amount,
+            price,
+            amount,
             total: total,
             sum: sum[type]
           }
@@ -249,17 +273,7 @@ class Orders extends React.Component {
         })
       }
     }
-    this.setState({
-      data: data
-    })
-    if (this.props.data.type === 'both' && !this.state.center) {
-      setTimeout(()=>{
-        this.toCenter()
-        this.setState({
-          center: true
-        })
-      }, 200)
-    }
+    return data
   }
 
   start() {

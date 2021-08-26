@@ -1,4 +1,9 @@
-# Kupi terminal: react client
+# Profitmaker terminal: react client 
+#### (used to named **Kupi terminal**)
+
+Demo: https://react.profitmaker.app/
+
+Main repository: https://github.com/suenot/kupi-terminal
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

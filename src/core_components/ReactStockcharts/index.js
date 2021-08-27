@@ -6,7 +6,7 @@ import './theme.sass'
 // import template from 'es6-template-strings' // TODO: remove from packages
 import axios from 'axios'
 import Demo from './Demo'
-import WidgetNotification from 'core_components/WidgetNotification'
+import WidgetNotification from '../../core_components/WidgetNotification'
 
 @observer
 export default class ChartComponent extends React.Component {
@@ -29,11 +29,7 @@ export default class ChartComponent extends React.Component {
   }
 
 	render() {
-    const {demo} = this.props.data
-    var data = this.state.data
-    if (demo) {
-      data = Demo
-    }
+    var {data, demo} = this.state
     if (this.state.hasError) {
       return <div></div>
     } else {
@@ -52,7 +48,7 @@ export default class ChartComponent extends React.Component {
           return order
         })
         return (
-          <div>
+          <div style={{height: '100%'}}>
             <Chart id={`${dashboardId}_${widgetId}_chart`} type="hybrid" data={ordersJSON} _data={this.props.data} />
             { demo && <WidgetNotification type="warning" msg="Demo mode: using test data"/> }
           </div>
@@ -117,28 +113,45 @@ export default class ChartComponent extends React.Component {
       hash: JSON.stringify(data)
     })
 
-    data = _.map(data, (item)=>{
+    data = reactStockChartsComputed(data)
+
+    this.setState({
+      data: data
+    })
+  }
+
+  reactStockChartsComputed(_data) {
+    var data = _.cloneDeep(_data)
+    data = data.map((order) => {
       return {
-        'date': new Date(item[0]),
-        'open': item[1],
-        'high': item[2],
-        'low': item[3],
-        'close': item[4],
-        'volume': item[5],
+        'date': new Date(order[0]),
+        'open': order[1],
+        'high': order[2],
+        'low': order[3],
+        'close': order[4],
+        'volume': order[5],
         'absoluteChange': '',
         'dividend': '',
         'percentChange': '',
         'split': '',
       }
     })
-    this.setState({
-      data: data
-    })
+    return data
   }
+
+  // reactStockChartsRender() {
+  //   if (this.data.length > 3) return true
+  //   else return false
+  // }
 
   start() {
     const {demo} = this.props.data
-    if (demo) return
+    if (demo) {
+      this.setState({
+        data: this.reactStockChartsComputed(Demo)
+      })
+      return
+    }
     this.setState({
       interval: setInterval(()=>{
         this.fetchOhlcv()

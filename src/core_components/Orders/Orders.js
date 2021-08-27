@@ -47,111 +47,114 @@ class Orders extends React.Component {
       asks = _.reverse(_.clone(asks))
     }
     return (
-      <div id={type === 'both' ? 'orders-both' : ''} className="kupi-pseudotable">
-        <div className="pseudotable">
+      <div>
+        <div id={type === 'both' ? 'orders-both' : ''} className="kupi-pseudotable">
+          <div className="pseudotable">
 
-          { (type !== 'both') &&
-            <div className="pseudotable-header">
-                <div className="pseudotable-row">
-                  <div style={{flex: '0 0 25%'}}>price <span className="muted">{coinTo}</span></div>
-                  <div style={{flex: '0 0 25%'}}>amount <span className="muted">{coinFrom}</span></div>
-                  <div style={{flex: '0 0 25%'}}>total <span className="muted">{coinTo}</span></div>
-                  <div style={{flex: '0 0 25%'}}>sum <span className="muted">{coinTo}</span></div>
-                </div>
-            </div>
-          }
-
-          <div className="pseudotable-body">
-            {
-              (type === 'both' || type === 'asks') &&
-              _.map(asks, (order) => {
-                // var _type = 'asks'
-                var percent = 0
-                var color = 'rgba(255, 138, 138, 0.42)'
-                if (visualMode !== 'none') {
-                  if (visualModeMax === 'total sum') {
-                    percent = visualMode === 'crocodile' ? order.sumPercent : order.totalPercent
-                  } else { // fixed
-                    if (visualMode === 'crocodile') {
-                      var visualModeCrocodileMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeCrocodileMax / CoinsStore.coins[coinTo].price_usd) : 30
-                      if (visualModeCrocodileMaxInQuote >= order.total) percent = 100
-                      percent = order.sum / visualModeCrocodileMaxInQuote * 100
-                    } else { // wall
-                      var visualModeWallsMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeWallsMax / CoinsStore.coins[coinTo].price_usd) : 1
-                      if (visualModeWallsMaxInQuote >= order.total) percent = 100
-                      percent = order.total / visualModeWallsMaxInQuote * 100
-                    }
-                  }
-                }
-
-                var percentInverse = 100 - percent
-                var percentInverseToFixed = percentInverse.toFixed(2)
-                return <div className="pseudotable-row"
-                  key={order.id + '--asks'}
-                  onClick={this.setAll.bind(this, order.price, order.amount, order.total)}
-                  style={{background: `linear-gradient(to right, #ffffff 0%, #ffffff ${percentInverseToFixed}%, ${color} ${percentInverseToFixed}%, ${color} 100%)`}}
-                >
-                  <div style={{flex: '0 0 25%'}}>{order.price.toFixed(8)}</div>
-                  <div style={{flex: '0 0 25%'}}>{order.amount.toFixed(8)}</div>
-                  <div style={{flex: '0 0 25%'}}>{order.total.toFixed(8)}</div>
-                  <div style={{flex: '0 0 25%'}}>{order.sum.toFixed(8)}</div>
-                </div>
-              })
-            }
-
-            { (type === 'both') &&
-              <div className="pseudotable-header ">
-                <div
-                  className="pseudotable-row"
-                  ref={this.ordersCenter}
-                  >
-                  <div style={{flex: '0 0 25%'}}>price  <span className="muted">{coinTo}</span></div>
-                  <div style={{flex: '0 0 25%'}}>amount <span className="muted">{coinFrom}</span></div>
-                  <div style={{flex: '0 0 25%'}}>total <span className="muted">{coinTo}</span></div>
-                  <div style={{flex: '0 0 25%'}}>sum <span className="muted">{coinTo}</span></div>
-                </div>
+            { (type !== 'both') &&
+              <div className="pseudotable-header">
+                  <div className="pseudotable-row">
+                    <div style={{flex: '0 0 25%'}}>price <span className="muted">{coinTo}</span></div>
+                    <div style={{flex: '0 0 25%'}}>amount <span className="muted">{coinFrom}</span></div>
+                    <div style={{flex: '0 0 25%'}}>total <span className="muted">{coinTo}</span></div>
+                    <div style={{flex: '0 0 25%'}}>sum <span className="muted">{coinTo}</span></div>
+                  </div>
               </div>
             }
 
-            {
-              (type === 'both' || type === 'bids') &&
-              _.map(data['bids'].slice(0, 30), (order) => {
-                var percent = 0
-                var color = 'rgba(78, 136, 71, 0.42)'
-
-                if (visualMode !== 'none') {
-                  if (visualModeMax === 'total sum') {
-                    percent = visualMode === 'crocodile' ? order.sumPercent : order.totalPercent
-                  } else { // fixed
-                    if (visualMode === 'crocodile') {
-                      var visualModeCrocodileMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeCrocodileMax / CoinsStore.coins[coinTo].price_usd) : 30
-                      if (visualModeCrocodileMaxInQuote >= order.total) percent = 100
-                      percent = order.sum / visualModeCrocodileMaxInQuote * 100
-                    } else { // wall
-                      var visualModeWallsMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeWallsMax / CoinsStore.coins[coinTo].price_usd) : 1
-                      if (visualModeWallsMaxInQuote >= order.total) percent = 100
-                      percent = order.total / visualModeWallsMaxInQuote * 100
+            <div className="pseudotable-body">
+              {
+                (type === 'both' || type === 'asks') &&
+                _.map(asks, (order) => {
+                  // var _type = 'asks'
+                  var percent = 0
+                  var color = 'rgba(255, 138, 138, 0.42)'
+                  if (visualMode !== 'none') {
+                    if (visualModeMax === 'total sum') {
+                      percent = visualMode === 'crocodile' ? order.sumPercent : order.totalPercent
+                    } else { // fixed
+                      if (visualMode === 'crocodile') {
+                        var visualModeCrocodileMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeCrocodileMax / CoinsStore.coins[coinTo].price_usd) : 30
+                        if (visualModeCrocodileMaxInQuote >= order.total) percent = 100
+                        percent = order.sum / visualModeCrocodileMaxInQuote * 100
+                      } else { // wall
+                        var visualModeWallsMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeWallsMax / CoinsStore.coins[coinTo].price_usd) : 1
+                        if (visualModeWallsMaxInQuote >= order.total) percent = 100
+                        percent = order.total / visualModeWallsMaxInQuote * 100
+                      }
                     }
                   }
-                }
 
-                var percentInverse = 100 - percent
-                var percentInverseToFixed = percentInverse.toFixed(2)
-                return <div
-                  className="pseudotable-row"
-                  key={order.id + '--bids'}
-                  onClick={this.setAll.bind(this, order.price, order.amount, order.total)}
-                  style={{background: `linear-gradient(to right, #ffffff 0%, #ffffff ${percentInverseToFixed}%, ${color} ${percentInverseToFixed}%, ${color} 100%)`}}
-                >
-                  <div style={{flex: '0 0 25%'}} >{order.price.toFixed(8)}</div>
-                  <div style={{flex: '0 0 25%'}} >{order.amount.toFixed(8)}</div>
-                  <div style={{flex: '0 0 25%'}} >{order.total.toFixed(8)}</div>
-                  <div style={{flex: '0 0 25%'}} >{order.sum.toFixed(8)}</div>
+                  var percentInverse = 100 - percent
+                  var percentInverseToFixed = percentInverse.toFixed(2)
+                  return <div className="pseudotable-row"
+                    key={order.id + '--asks'}
+                    onClick={this.setAll.bind(this, order.price, order.amount, order.total)}
+                    style={{background: `linear-gradient(to right, #ffffff 0%, #ffffff ${percentInverseToFixed}%, ${color} ${percentInverseToFixed}%, ${color} 100%)`}}
+                  >
+                    <div style={{flex: '0 0 25%'}}>{order.price.toFixed(8)}</div>
+                    <div style={{flex: '0 0 25%'}}>{order.amount.toFixed(8)}</div>
+                    <div style={{flex: '0 0 25%'}}>{order.total.toFixed(8)}</div>
+                    <div style={{flex: '0 0 25%'}}>{order.sum.toFixed(8)}</div>
+                  </div>
+                })
+              }
+
+              { (type === 'both') &&
+                <div className="pseudotable-header ">
+                  <div
+                    className="pseudotable-row"
+                    ref={this.ordersCenter}
+                    >
+                    <div style={{flex: '0 0 25%'}}>price  <span className="muted">{coinTo}</span></div>
+                    <div style={{flex: '0 0 25%'}}>amount <span className="muted">{coinFrom}</span></div>
+                    <div style={{flex: '0 0 25%'}}>total <span className="muted">{coinTo}</span></div>
+                    <div style={{flex: '0 0 25%'}}>sum <span className="muted">{coinTo}</span></div>
+                  </div>
                 </div>
-              })
-            }
+              }
+
+              {
+                (type === 'both' || type === 'bids') &&
+                _.map(data['bids'].slice(0, 30), (order) => {
+                  var percent = 0
+                  var color = 'rgba(78, 136, 71, 0.42)'
+
+                  if (visualMode !== 'none') {
+                    if (visualModeMax === 'total sum') {
+                      percent = visualMode === 'crocodile' ? order.sumPercent : order.totalPercent
+                    } else { // fixed
+                      if (visualMode === 'crocodile') {
+                        var visualModeCrocodileMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeCrocodileMax / CoinsStore.coins[coinTo].price_usd) : 30
+                        if (visualModeCrocodileMaxInQuote >= order.total) percent = 100
+                        percent = order.sum / visualModeCrocodileMaxInQuote * 100
+                      } else { // wall
+                        var visualModeWallsMaxInQuote = (CoinsStore.coins[coinTo] && CoinsStore.coins[coinTo].price_usd) ? (visualModeWallsMax / CoinsStore.coins[coinTo].price_usd) : 1
+                        if (visualModeWallsMaxInQuote >= order.total) percent = 100
+                        percent = order.total / visualModeWallsMaxInQuote * 100
+                      }
+                    }
+                  }
+
+                  var percentInverse = 100 - percent
+                  var percentInverseToFixed = percentInverse.toFixed(2)
+                  return <div
+                    className="pseudotable-row"
+                    key={order.id + '--bids'}
+                    onClick={this.setAll.bind(this, order.price, order.amount, order.total)}
+                    style={{background: `linear-gradient(to right, #ffffff 0%, #ffffff ${percentInverseToFixed}%, ${color} ${percentInverseToFixed}%, ${color} 100%)`}}
+                  >
+                    <div style={{flex: '0 0 25%'}} >{order.price.toFixed(8)}</div>
+                    <div style={{flex: '0 0 25%'}} >{order.amount.toFixed(8)}</div>
+                    <div style={{flex: '0 0 25%'}} >{order.total.toFixed(8)}</div>
+                    <div style={{flex: '0 0 25%'}} >{order.sum.toFixed(8)}</div>
+                  </div>
+                })
+              }
+            </div>
           </div>
         </div>
+        { demo && <WidgetNotification type="warning" msg="Demo mode: using test data"/> }
       </div>
     )
   }

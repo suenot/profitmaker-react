@@ -29,7 +29,8 @@ export default class ChartComponent extends React.Component {
   }
 
 	render() {
-    var {data, demo} = this.state
+    var {data} = this.state
+    var demo = data
     if (this.state.hasError) {
       return <div></div>
     } else {

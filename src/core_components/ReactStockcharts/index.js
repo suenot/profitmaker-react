@@ -30,7 +30,10 @@ export default class ChartComponent extends React.Component {
 
 	render() {
     var {data} = this.state
-    var demo = data
+    var {demo} = data
+    // if (demo) {
+    //   data = this.reactStockChartsComputed(Demo)
+    // }
     if (this.state.hasError) {
       return <div></div>
     } else {
@@ -90,6 +93,13 @@ export default class ChartComponent extends React.Component {
   }
 
   async fetchOhlcv() {
+    const {demo} = this.props.data
+    if (demo) {
+      this.setState({
+        data: this.reactStockChartsComputed(Demo)
+      })
+      return data
+    }
     const {stock, pair, timeframe} = this.props.data
     var stockLowerCase = stock.toLowerCase()
 
@@ -114,7 +124,7 @@ export default class ChartComponent extends React.Component {
       hash: JSON.stringify(data)
     })
 
-    data = reactStockChartsComputed(data)
+    data = this.reactStockChartsComputed(data)
 
     this.setState({
       data: data
@@ -146,13 +156,13 @@ export default class ChartComponent extends React.Component {
   // }
 
   start() {
-    const {demo} = this.props.data
-    if (demo) {
-      this.setState({
-        data: this.reactStockChartsComputed(Demo)
-      })
-      return
-    }
+    // const {demo} = this.props.data
+    // if (demo) {
+      // this.setState({
+      //   data: this.reactStockChartsComputed(Demo)
+      // })
+      // return
+    // }
     this.setState({
       interval: setInterval(()=>{
         this.fetchOhlcv()

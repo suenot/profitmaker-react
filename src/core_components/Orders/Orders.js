@@ -31,12 +31,12 @@ class Orders extends React.Component {
   }
 
   render() {
-    const {type, stock, pair, visualMode, visualModeMax, visualModeCrocodileMax, visualModeWallsMax, demo} = this.props.data
+    const {type, stock, pair, visualMode, visualModeMax, visualModeCrocodileMax, visualModeWallsMax} = this.props.data
     var [coinFrom, coinTo] = pair.split('_')
     var key = `${stock}--${pair}`
     // var color = type === 'asks' ? 'rgba(255, 138, 138, 0.42)' : 'rgba(78, 136, 71, 0.42)'
     var data = this.state.data
-
+    var demo = this.state.data.demo
     // return <p>{JSON.stringify(data)}</p>
     if (data === undefined || data['asks'] === undefined || data['bids'] === undefined) {
 			return <Preloader />
@@ -222,8 +222,9 @@ class Orders extends React.Component {
     var stockLowerCase = stock.toLowerCase()
     var data
     if (demo) {
-      data = Demo
-      this.finish()
+      data = _.cloneDeep(Demo)
+      // return
+      // this.finish()
     } else if (this.state.tube === 'ccxt') {
       data = await this.fetchOrders_ccxt(stockLowerCase, pair)
     } else {
